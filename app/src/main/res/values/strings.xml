@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Ppaps</string>
+    <string name="title_home">Home</string>
+    <string name="title_account">Account</string>
+    <string name="title_history">Riwayat</string>
+    <string name="title_activity_signup">SignupActivity</string>
+
+    <string name="signup">SIGN UP</string>
+    <string name="signin_bold">SIGN IN</string>
+    <string name="login_name">Nama</string>
+    <string name="login_email">Email</string>
+    <string name="login_hp">No. Hp</string>
+    <string name="login_pw">Password</string>
+    <string name="nama_hint">Masukkan nama</string>
+    <string name="email_hint">Masukkan alamat email</string>
+    <string name="hp_hint">Masukkan nomor telepon</string>
+    <string name="pw_hint">Masukkan password</string>
+    <string name="signin_help">Already have an account?</string>
+    <string name="signin">Sign In</string>
+    <string name="remember_pass">Remember me</string>
+    <string name="forgot_pass">Lupa password?</string>
+
+    <string name="face_verif">Verifikasi Wajah</string>
+    <string name="cam_text">Posisikan wajah anda</string>
+    <string name="welcome">Selamat Datang "username"</string>
+    <string name="emergency">DARURAT</string>
+    <string name="order">PESAN</string>
+    <string name="hp_cs">No. HP yang akan dihubungi</string>
+    <string name="emergency_hold">Tekan Tombol Emergency Selama 3 Detik</string>
+</resources>
