@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.example.ppaps.ui.main.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_emergencyFragment"
+            app:destination="@id/emergencyFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_account"
@@ -22,4 +26,10 @@
         android:name="com.example.ppaps.ui.main.history.HistoryFragment"
         android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/emergencyFragment"
+        android:name="com.example.ppaps.ui.main.emergency.EmergencyFragment"
+        android:label="fragment_emergency"
+        tools:layout="@layout/fragment_emergency" />
 </navigation>

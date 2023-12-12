@@ -1,4 +1,7 @@
 package com.example.ppaps.data.pref
 
-class UserModel {
-}
+data class UserModel(
+    val email: String,
+    val token: String,
+    val isLogin: Boolean = false
+)

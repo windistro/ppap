@@ -19,10 +19,12 @@ import com.example.ppaps.R
 import com.example.ppaps.databinding.ActivityVerificationBinding
 import com.example.ppaps.ui.createCustomTempFile
 import com.example.ppaps.ui.main.MainActivity
+import com.example.ppaps.ui.signin.SigninActivity
 
 class VerificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVerificationBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+    private var imageCapture: ImageCapture? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -52,9 +54,8 @@ class VerificationActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.face_verif)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.test.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        binding.captureImage.setOnClickListener {
+            takePhoto()
         }
 
         if (allPermissionsGranted()) {
@@ -76,12 +77,15 @@ class VerificationActivity : AppCompatActivity() {
                     it.setSurfaceProvider(binding.viewfinder.surfaceProvider)
                 }
 
+            imageCapture = ImageCapture.Builder().build()
+
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     this,
                     cameraSelector,
-                    preview
+                    preview,
+                    imageCapture
                 )
             } catch (exc: Exception) {
                 showToast("Gagal memunculkan kamera")
@@ -91,7 +95,7 @@ class VerificationActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
-        val imageCapture = ImageCapture.Builder().build()
+        val imageCapture = imageCapture ?: return
         val photoFile = createCustomTempFile(application)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
@@ -106,7 +110,7 @@ class VerificationActivity : AppCompatActivity() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     showToast("Berhasil mengambil gambar")
-                    val intent = Intent(this@VerificationActivity, MainActivity::class.java)
+                    val intent = Intent(this@VerificationActivity, SigninActivity::class.java)
                     startActivity(intent)
                 }
             }

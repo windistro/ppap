@@ -27,4 +27,6 @@
     <string name="order">PESAN</string>
     <string name="hp_cs">No. HP yang akan dihubungi</string>
     <string name="emergency_hold">Tekan Tombol Emergency Selama 3 Detik</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

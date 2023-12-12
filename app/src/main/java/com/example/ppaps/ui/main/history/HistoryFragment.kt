@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.ppaps.R
 import com.example.ppaps.databinding.FragmentHistoryBinding
 
 class HistoryFragment : Fragment() {
@@ -27,6 +29,9 @@ class HistoryFragment : Fragment() {
 
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        val gradientDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_bg)
+        view?.background = gradientDrawable
 
         val textView: TextView = binding.textNotifications
         notificationsViewModel.text.observe(viewLifecycleOwner) {
