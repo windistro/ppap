@@ -31,5 +31,14 @@
         android:id="@+id/emergencyFragment"
         android:name="com.example.ppaps.ui.main.emergency.EmergencyFragment"
         android:label="fragment_emergency"
-        tools:layout="@layout/fragment_emergency" />
+        tools:layout="@layout/fragment_emergency" >
+        <action
+            android:id="@+id/action_emergencyFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.ppaps.ui.main.home.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
 </navigation>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.ppaps.R
 import com.example.ppaps.databinding.FragmentEmergencyBinding
@@ -29,6 +30,9 @@ class EmergencyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.cvDarurat.setOnClickListener {
+            it.findNavController().navigate(R.id.action_emergencyFragment_to_cameraFragment)
+        }
     }
 
 
