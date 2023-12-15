@@ -29,4 +29,9 @@
     <string name="emergency_hold">Tekan Tombol Emergency Selama 3 Detik</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+     <string name="nama_jalan">Jalan Universitas Jember, \n Jember 65473</string>
+    <string name="kami_sedang_menghubungi_anda">Kami sedang menghubungi anda</string>
+    <string name="panggilan_darurat_terkonfirmasi">Panggilan Darurat Terkonfirmasi</string>
+    <string name="kami_akan_segera_menuju_ke_lokasi_pastikan_alamat_yang_kamu_berikan_jelas">Kami akan segera menuju ke lokasi, pastikan alamat yang kamu berikan jelas</string>
 </resources>
