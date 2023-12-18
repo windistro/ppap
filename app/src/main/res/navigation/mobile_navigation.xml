@@ -40,5 +40,32 @@
         android:id="@+id/cameraFragment"
         android:name="com.example.ppaps.ui.main.home.CameraFragment"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_callFragment"
+            app:destination="@id/callFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/callFragment"
+        android:name="com.example.ppaps.ui.main.call.CallFragment"
+        android:label="fragment_call"
+        tools:layout="@layout/fragment_call" >
+        <action
+            android:id="@+id/action_callFragment_to_emergencyConfirmFragment"
+            app:destination="@id/emergencyConfirmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/emergencyConfirmFragment"
+        android:name="com.example.ppaps.ui.main.confirm.EmergencyConfirmFragment"
+        android:label="fragment_emergency_confirm"
+        tools:layout="@layout/fragment_emergency_confirm" >
+        <action
+            android:id="@+id/action_emergencyConfirmFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.ppaps.ui.main.geolocation.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

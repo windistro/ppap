@@ -9,10 +9,12 @@
     <string name="signin_bold">SIGN IN</string>
     <string name="login_name">Nama</string>
     <string name="login_email">Email</string>
+    <string name="login_username">Username</string>
     <string name="login_hp">No. Hp</string>
     <string name="login_pw">Password</string>
     <string name="nama_hint">Masukkan nama</string>
     <string name="email_hint">Masukkan alamat email</string>
+    <string name="username_hint">Masukkan username</string>
     <string name="hp_hint">Masukkan nomor telepon</string>
     <string name="pw_hint">Masukkan password</string>
     <string name="signin_help">Already have an account?</string>
@@ -30,7 +32,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-     <string name="nama_jalan">Jalan Universitas Jember, \n Jember 65473</string>
+    <string name="nama_jalan">Jalan Universitas Jember, \n Jember 65473</string>
     <string name="kami_sedang_menghubungi_anda">Kami sedang menghubungi anda</string>
     <string name="panggilan_darurat_terkonfirmasi">Panggilan Darurat Terkonfirmasi</string>
     <string name="kami_akan_segera_menuju_ke_lokasi_pastikan_alamat_yang_kamu_berikan_jelas">Kami akan segera menuju ke lokasi, pastikan alamat yang kamu berikan jelas</string>

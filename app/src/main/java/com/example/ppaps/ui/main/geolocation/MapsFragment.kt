@@ -1,4 +1,4 @@
-package com.example.myambulance.geolocation
+package com.example.ppaps.ui.main.geolocation
 
 import androidx.fragment.app.Fragment
 
@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.myambulance.R
-
+import com.example.ppaps.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,8 +19,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
-
-    val RsBaladhikaHusada = LatLng(8.161774010396654, 113.70622433252021)
+    val RsBaladhikaHusada = LatLng(-8.161774010396654, 113.70622433252021)
     val RsCitraHusadaJember = LatLng(-8.166520390807419, 113.6806551655391)
     val RsudDrSoebandi = LatLng(-8.150644898619014, 113.71547929437509)
     val RsParuJember = LatLng(-8.159716168375407, 113.70551349252128)
@@ -81,6 +79,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isIndoorLevelPickerEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+        mMap.uiSettings.isMapToolbarEnabled = true
+
         for (i in locationArrayList!!.indices) {
             val hospitalName: String = getHospitalName(i)
             mMap.addMarker(
@@ -88,8 +91,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     .position(locationArrayList!![i])
                     .title(hospitalName)
             )
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList!!.get(i)))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationArrayList!!.get(i), (15.0f)))
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(locationArrayList!!.get(i)))
         }
     }
 

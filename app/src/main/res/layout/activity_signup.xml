@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bg"
     tools:context=".ui.signup.SignupActivity">
-
-<!--    <ImageView-->
-<!--        android:id="@+id/logo"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:paddingTop="32dp"-->
-<!--        android:src="@drawable/ppap_logo"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
     <ImageView
         android:id="@+id/ambulance"
         android:layout_width="wrap_content"
@@ -23,6 +13,18 @@
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ppap_logo_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:elevation="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -67,9 +69,10 @@
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusTopStart="8dp"
-                app:startIconDrawable="@drawable/mail_24px">
+                app:startIconDrawable="@drawable/baseline_person_24">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@android:style/TextAppearance.Small.Inverse"
@@ -84,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginHorizontal="16dp"
-                android:text="@string/login_email"
+                android:text="@string/login_username"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -96,16 +99,17 @@
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusTopStart="8dp"
-                app:startIconDrawable="@drawable/mail_24px">
+                app:startIconDrawable="@drawable/baseline_person_24">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@android:style/TextAppearance.Small.Inverse"
                     android:ems="10"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text"
                     android:textColor="@color/black"
-                    android:hint="@string/email_hint"/>
+                    android:hint="@string/username_hint"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -128,6 +132,7 @@
                 app:startIconDrawable="@drawable/call_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/hpEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@android:style/TextAppearance.Small.Inverse"
@@ -158,6 +163,7 @@
                 app:startIconDrawable="@drawable/lock_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pwEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@android:style/TextAppearance.Small.Inverse"
@@ -203,5 +209,6 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

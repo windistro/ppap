@@ -15,6 +15,7 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import com.example.ppaps.R
 import com.example.ppaps.databinding.FragmentCameraBinding
 import com.example.ppaps.databinding.FragmentHomeBinding
@@ -63,6 +64,10 @@ class CameraFragment : Fragment() {
         } else {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
             startCamera()
+        }
+
+        binding.test.setOnClickListener {
+            it.findNavController().navigate(R.id.action_cameraFragment_to_callFragment)
         }
     }
 

@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        supportActionBar?.setTitle(R.string.welcome)
-        supportActionBar?.setIcon(R.drawable.logo_small)
+        supportActionBar?.hide()
     }
 }
