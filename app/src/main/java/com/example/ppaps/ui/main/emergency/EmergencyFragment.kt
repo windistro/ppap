@@ -1,10 +1,15 @@
 package com.example.ppaps.ui.main.emergency
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.GestureDetector
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -30,11 +35,28 @@ class EmergencyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.cvDarurat.setOnClickListener {
-            it.findNavController().navigate(R.id.action_emergencyFragment_to_cameraFragment)
+        val toolbar = binding.myToolbar
+        toolbar.title = "Panggilan Darurat"
+        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_arrow_back_24)
+
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.cvDarurat.setOnLongClickListener {
+            if (binding.nohpEditText.text.toString().isNotEmpty()) {
+                it.findNavController().navigate(R.id.action_emergencyFragment_to_cameraFragment)
+                true
+            } else {
+                showToast("No HP tidak boleh kosong")
+                false
+            }
         }
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

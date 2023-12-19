@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.ppaps.data.ResultState
 import com.example.ppaps.databinding.ActivitySignupBinding
 import com.example.ppaps.ui.ViewModelFactory
+import com.example.ppaps.ui.main.MainActivity
 import com.example.ppaps.ui.signin.SigninActivity
 import com.example.ppaps.ui.verification.VerificationActivity
 import kotlinx.coroutines.launch
@@ -62,37 +63,46 @@ class SignupActivity : AppCompatActivity() {
                 val password = binding.pwEditText.text.toString()
                 val nohp = binding.hpEditText.text.toString()
                 val name = binding.nameEditText.text.toString()
-
-                viewModel.register(username, password, nohp, name).observe(this@SignupActivity) {
-                    when (it) {
-                        is ResultState.Success -> {
-                            showLoading(false)
-                            AlertDialog.Builder(this@SignupActivity).apply {
-                                setTitle("Akun terbuat!!!")
-                                setMessage("Selamat akun dengan username $username telah terbuat, silahkan login terlebih dahulu")
-                                setPositiveButton("Lanjut") { _, _ ->
-                                    val intent =
-                                        Intent(this@SignupActivity, VerificationActivity::class.java)
-                                    intent.flags =
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                    startActivity(intent)
+                if (username.isEmpty() || password.isEmpty() || nohp.isEmpty() || name.isEmpty()) {
+                    AlertDialog.Builder(this@SignupActivity).apply {
+                        setTitle("Error")
+                        setMessage("Data tidak boleh kosong")
+                        setPositiveButton("Lanjut") { _, _ -> }
+                        create()
+                        show()
+                    }
+                } else {
+                    viewModel.register(username, password, nohp, name).observe(this@SignupActivity) {
+                        when (it) {
+                            is ResultState.Success -> {
+                                showLoading(false)
+                                AlertDialog.Builder(this@SignupActivity).apply {
+                                    setTitle("Akun terbuat!!!")
+                                    setMessage("Selamat akun dengan username $username telah terbuat, silahkan login terlebih dahulu")
+                                    setPositiveButton("Lanjut") { _, _ ->
+                                        val intent =
+                                            Intent(this@SignupActivity, VerificationActivity::class.java)
+                                        intent.flags =
+                                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                    }
+                                    create()
+                                    show()
                                 }
-                                create()
-                                show()
                             }
-                        }
-                        is ResultState.Loading -> showLoading(true)
-                        is ResultState.Error -> {
-                            showLoading(false)
-                            AlertDialog.Builder(this@SignupActivity).apply {
-                                setTitle("Error")
-                                setMessage(it.message)
-                                setPositiveButton("Lanjut") { _, _ -> }
-                                create()
-                                show()
+                            is ResultState.Loading -> showLoading(true)
+                            is ResultState.Error -> {
+                                showLoading(false)
+                                AlertDialog.Builder(this@SignupActivity).apply {
+                                    setTitle("Error")
+                                    setMessage(it.message)
+                                    setPositiveButton("Lanjut") { _, _ -> }
+                                    create()
+                                    show()
+                                }
                             }
+                            else -> {}
                         }
-                        else -> {}
                     }
                 }
             }

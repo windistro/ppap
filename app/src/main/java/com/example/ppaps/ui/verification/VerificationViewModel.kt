@@ -1,18 +1,18 @@
-package com.example.ppaps.ui.main.home
+package com.example.ppaps.ui.verification
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.ppaps.data.Repository
 import com.example.ppaps.data.pref.UserModel
-import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
-class HomeViewModel(private val repository: Repository) : ViewModel() {
+class VerificationViewModel(private val repository: Repository) : ViewModel() {
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
 
     suspend fun getUser(token: String) = repository.getUserData(token)
+    suspend fun upload(url: String, file: MultipartBody.Part, user_id: RequestBody) = repository.uploadImage(url, file, user_id)
 }

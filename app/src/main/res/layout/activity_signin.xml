@@ -91,7 +91,7 @@
                 app:boxCornerRadiusTopStart="8dp"
                 app:startIconDrawable="@drawable/lock_24px">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.example.ppaps.ui.custom.PasswordEditText
                     android:id="@+id/pwEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

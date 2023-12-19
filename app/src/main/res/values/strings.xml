@@ -21,6 +21,7 @@
     <string name="signin">Sign In</string>
     <string name="remember_pass">Remember me</string>
     <string name="forgot_pass">Lupa password?</string>
+    <string name="password_8">Password tidak boleh kurang dari 8 karakter</string>
 
     <string name="face_verif">Verifikasi Wajah</string>
     <string name="cam_text">Posisikan wajah anda</string>
@@ -36,4 +37,5 @@
     <string name="kami_sedang_menghubungi_anda">Kami sedang menghubungi anda</string>
     <string name="panggilan_darurat_terkonfirmasi">Panggilan Darurat Terkonfirmasi</string>
     <string name="kami_akan_segera_menuju_ke_lokasi_pastikan_alamat_yang_kamu_berikan_jelas">Kami akan segera menuju ke lokasi, pastikan alamat yang kamu berikan jelas</string>
+    <string name="register_success">Registrasi Berhasil</string>
 </resources>

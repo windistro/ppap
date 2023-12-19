@@ -65,10 +65,6 @@ class CameraFragment : Fragment() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
             startCamera()
         }
-
-        binding.test.setOnClickListener {
-            it.findNavController().navigate(R.id.action_cameraFragment_to_callFragment)
-        }
     }
 
     private fun startCamera() {

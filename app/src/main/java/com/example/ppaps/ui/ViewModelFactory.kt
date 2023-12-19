@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.ppaps.data.Repository
 import com.example.ppaps.di.Injection
+import com.example.ppaps.ui.main.home.HomeViewModel
 import com.example.ppaps.ui.signin.SigninViewModel
 import com.example.ppaps.ui.signup.SignupViewModel
+import com.example.ppaps.ui.verification.VerificationViewModel
 
 class ViewModelFactory(private val repository: Repository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -18,6 +20,12 @@ class ViewModelFactory(private val repository: Repository) : ViewModelProvider.N
             }
             modelClass.isAssignableFrom(SigninViewModel::class.java) -> {
                 SigninViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(VerificationViewModel::class.java) -> {
+                VerificationViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

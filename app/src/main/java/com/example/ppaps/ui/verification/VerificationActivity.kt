@@ -6,8 +6,11 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -15,16 +18,31 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.ppaps.R
+import com.example.ppaps.data.ResultState
 import com.example.ppaps.databinding.ActivityVerificationBinding
+import com.example.ppaps.ui.ViewModelFactory
 import com.example.ppaps.ui.createCustomTempFile
 import com.example.ppaps.ui.main.MainActivity
+import com.example.ppaps.ui.reduceFileImage
 import com.example.ppaps.ui.signin.SigninActivity
+import com.example.ppaps.ui.signup.SignupViewModel
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class VerificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVerificationBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
     private var imageCapture: ImageCapture? = null
+    private var user_id: String = ""
+    private val viewModel by viewModels<VerificationViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -36,10 +54,6 @@ class VerificationActivity : AppCompatActivity() {
                 showToast("Permission request denied")
             }
         }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
 
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
@@ -64,6 +78,8 @@ class VerificationActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
             startCamera()
         }
+
+        getUserData()
     }
 
     private fun startCamera() {
@@ -110,11 +126,63 @@ class VerificationActivity : AppCompatActivity() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     showToast("Berhasil mengambil gambar")
-                    val intent = Intent(this@VerificationActivity, SigninActivity::class.java)
-                    startActivity(intent)
+
+                    val photos = File(output.savedUri?.path!!).reduceFileImage()
+                    val requestBody = user_id.toRequestBody("text/plain".toMediaType())
+                    val requestImageFile = photos.asRequestBody("image/jpeg".toMediaType())
+                    val multipartBody = MultipartBody.Part.createFormData(
+                        "face_photo",
+                        photos.name,
+                        requestImageFile
+                    )
+                    val url = "https://registration-a56t3srpta-uc.a.run.app/upload"
+
+                    lifecycleScope.launch {
+                        viewModel.upload(url, multipartBody, requestBody).observe(this@VerificationActivity) {
+                            when (it) {
+                                is ResultState.Success -> {
+                                    showLoading(false)
+                                    showToast("Foto berhasil, silahkan foto kembali")
+                                }
+                                is ResultState.Loading -> { showLoading(true) }
+                                is ResultState.Error -> {
+                                    showLoading(false)
+                                    showToast(it.message!!)
+                                }
+                                else -> {}
+                            }
+                        }
+                    }
                 }
             }
         )
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun getUserData() {
+        viewModel.getSession().observe(this@VerificationActivity) {
+            lifecycleScope.launch {
+                viewModel.getUser(it.token).observe(this@VerificationActivity) {
+                    when (it) {
+                        is ResultState.Success -> {
+                            user_id = it.data.user?.idUser!!
+                        }
+                        is ResultState.Loading -> {  }
+                        is ResultState.Error -> {
+                            showToast(it.message!!)
+                        }
+                        else -> {}
+                    }
+                }
+            }
+        }
     }
 
     companion object {

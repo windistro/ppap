@@ -17,6 +17,7 @@ import com.example.ppaps.databinding.ActivitySigninBinding
 import com.example.ppaps.ui.ViewModelFactory
 import com.example.ppaps.ui.main.MainActivity
 import com.example.ppaps.ui.signup.SignupViewModel
+import com.example.ppaps.ui.verification.VerificationActivity
 import kotlinx.coroutines.launch
 
 class SigninActivity : AppCompatActivity() {

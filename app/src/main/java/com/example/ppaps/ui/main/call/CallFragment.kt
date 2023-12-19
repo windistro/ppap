@@ -23,6 +23,8 @@ class CallFragment : Fragment() {
         val gradientDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_bg)
         view?.background = gradientDrawable
         return binding.root
+
+        
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
