@@ -23,6 +23,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var userid = ""
     private val viewModel by viewModels<HomeViewModel> {
         ViewModelFactory.getInstance(requireContext())
     }
@@ -46,7 +47,9 @@ class HomeFragment : Fragment() {
         getToken()
 
         binding.cvDarurat.setOnClickListener {
-            it.findNavController().navigate(R.id.action_navigation_home_to_emergencyFragment)
+            val mBundle = Bundle()
+            mBundle.putString(EXTRA_ID, userid)
+            it.findNavController().navigate(R.id.action_navigation_home_to_emergencyFragment, mBundle)
         }
     }
 
@@ -57,6 +60,7 @@ class HomeFragment : Fragment() {
                     when (it) {
                         is ResultState.Success -> {
                             val username = it.data.user?.username!!
+                            userid = it.data.user.idUser!!
                             showUsername(username)
                         }
                         is ResultState.Loading -> {  }
@@ -80,5 +84,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val EXTRA_ID = "userid"
     }
 }

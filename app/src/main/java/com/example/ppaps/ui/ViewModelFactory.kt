@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.ppaps.data.Repository
 import com.example.ppaps.di.Injection
+import com.example.ppaps.ui.main.home.CameraViewModel
 import com.example.ppaps.ui.main.home.HomeViewModel
 import com.example.ppaps.ui.signin.SigninViewModel
 import com.example.ppaps.ui.signup.SignupViewModel
@@ -26,6 +27,9 @@ class ViewModelFactory(private val repository: Repository) : ViewModelProvider.N
             }
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
                 HomeViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(CameraViewModel::class.java) -> {
+                CameraViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

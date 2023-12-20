@@ -14,5 +14,5 @@ class VerificationViewModel(private val repository: Repository) : ViewModel() {
     }
 
     suspend fun getUser(token: String) = repository.getUserData(token)
-    suspend fun upload(url: String, file: MultipartBody.Part, user_id: RequestBody) = repository.uploadImage(url, file, user_id)
+    suspend fun upload(file: MultipartBody.Part, user_id: RequestBody) = repository.uploadImage(file, user_id)
 }

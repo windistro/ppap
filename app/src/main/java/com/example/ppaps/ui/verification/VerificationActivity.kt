@@ -3,6 +3,7 @@ package com.example.ppaps.ui.verification
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,6 +29,7 @@ import com.example.ppaps.ui.main.MainActivity
 import com.example.ppaps.ui.reduceFileImage
 import com.example.ppaps.ui.signin.SigninActivity
 import com.example.ppaps.ui.signup.SignupViewModel
+import com.example.ppaps.ui.uriToFile
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -127,18 +129,19 @@ class VerificationActivity : AppCompatActivity() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     showToast("Berhasil mengambil gambar")
 
-                    val photos = File(output.savedUri?.path!!).reduceFileImage()
+                    val photoUri = output.savedUri ?: Uri.fromFile(photoFile)
+                    val imageFile = uriToFile(photoUri, this@VerificationActivity).reduceFileImage()
+
                     val requestBody = user_id.toRequestBody("text/plain".toMediaType())
-                    val requestImageFile = photos.asRequestBody("image/jpeg".toMediaType())
+                    val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
                     val multipartBody = MultipartBody.Part.createFormData(
                         "face_photo",
-                        photos.name,
+                        imageFile.name,
                         requestImageFile
                     )
-                    val url = "https://registration-a56t3srpta-uc.a.run.app/upload"
 
                     lifecycleScope.launch {
-                        viewModel.upload(url, multipartBody, requestBody).observe(this@VerificationActivity) {
+                        viewModel.upload(multipartBody, requestBody).observe(this@VerificationActivity) {
                             when (it) {
                                 is ResultState.Success -> {
                                     showLoading(false)

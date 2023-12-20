@@ -8,11 +8,13 @@ import com.example.ppaps.data.remote.ApiService
 import com.example.ppaps.data.response.LoginResponse
 import com.example.ppaps.data.response.Response
 import com.example.ppaps.data.response.UserResponse
+import com.example.ppaps.data.response.VerificationResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.HttpException
+import java.net.SocketTimeoutException
 
 class Repository private constructor(
     private val userPreference: UserPreference,
@@ -67,15 +69,39 @@ class Repository private constructor(
         }
     }
 
-    suspend fun uploadImage(url: String, photo: MultipartBody.Part, user_id: RequestBody) = liveData {
+    suspend fun uploadImage(photo: MultipartBody.Part, user_id: RequestBody) = liveData {
         emit(ResultState.Loading)
         try {
-            val response = apiService.upload("Bearer secret", url,  photo, user_id)
+            val response = apiService.upload("Bearer secret", "https://registration-a56t3srpta-uc.a.run.app/upload",  photo, user_id)
+            when (response.data) {
+                1 -> {
+                    emit(ResultState.Success(response))
+                }
+                0 -> {
+                    emit(ResultState.Error(response.status?.message))
+                }
+                null -> {
+                    emit(ResultState.Error(response.status?.message))
+                }
+            }
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, VerificationResponse::class.java)
+            emit(errorBody.status?.message?.let { ResultState.Error(it) })
+        } catch (e: SocketTimeoutException) {
+            emit(ResultState.Error(e.message))
+        }
+    }
+
+    suspend fun verification(photo: MultipartBody.Part, user_id: RequestBody) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val response = apiService.upload("Bearer secret", "https://verification-a56t3srpta-uc.a.run.app/verification",  photo, user_id)
             emit(ResultState.Success(response))
         } catch (e: HttpException) {
-//            val jsonInString = e.response()?.errorBody()?.string()
-//            val errorBody = Gson().fromJson(jsonInString, UserResponse::class.java)
-            emit(e.message?.let { ResultState.Error(it) })
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, UserResponse::class.java)
+            emit(errorBody.message?.let { ResultState.Error(it) })
         }
     }
 

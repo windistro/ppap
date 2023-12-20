@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.ppaps.R
 import com.example.ppaps.databinding.FragmentEmergencyBinding
+import com.example.ppaps.ui.main.home.HomeFragment
 
 class EmergencyFragment : Fragment() {
 
@@ -39,13 +40,17 @@ class EmergencyFragment : Fragment() {
         toolbar.title = "Panggilan Darurat"
         toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_arrow_back_24)
 
+        val dataId = arguments?.getString(HomeFragment.EXTRA_ID)
+
         toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         binding.cvDarurat.setOnLongClickListener {
             if (binding.nohpEditText.text.toString().isNotEmpty()) {
-                it.findNavController().navigate(R.id.action_emergencyFragment_to_cameraFragment)
+                val mBundle = Bundle()
+                mBundle.putString(HomeFragment.EXTRA_ID, dataId)
+                it.findNavController().navigate(R.id.action_emergencyFragment_to_cameraFragment, mBundle)
                 true
             } else {
                 showToast("No HP tidak boleh kosong")
