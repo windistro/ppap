@@ -63,5 +63,9 @@
     <string name="about">About</string>
     <string name="feedback">Feedback</string>
     <string name="setting">Setting</string>
-    
+
+    <string name="perkiraan_sampai_12_34_pm">Perkiraan Sampai: 12:34 PM</string>
+    <string name="status_pesanan_terkonfirmasi">Status: Pesanan Terkonfirmasi</string>
+    <string name="plat_mobil_abc_123">Plat Mobil: ABC 123</string>
+    <string name="driver_budi_haryadi">Driver : Budi Haryadi</string>
 </resources>
