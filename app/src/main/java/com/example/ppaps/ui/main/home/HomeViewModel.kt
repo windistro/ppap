@@ -15,4 +15,6 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
     }
 
     suspend fun getUser(token: String) = repository.getUserData(token)
+
+    suspend fun checkVerif(userId: String) = repository.check(userId)
 }

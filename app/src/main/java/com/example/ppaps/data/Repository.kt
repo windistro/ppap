@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import com.example.ppaps.data.pref.UserModel
 import com.example.ppaps.data.pref.UserPreference
 import com.example.ppaps.data.remote.ApiService
+import com.example.ppaps.data.response.CheckResponse
 import com.example.ppaps.data.response.LoginResponse
 import com.example.ppaps.data.response.Response
 import com.example.ppaps.data.response.UserResponse
@@ -13,6 +14,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 
@@ -66,6 +68,47 @@ class Repository private constructor(
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, UserResponse::class.java)
             emit(errorBody.message?.let { ResultState.Error(it) })
+        }
+    }
+
+    suspend fun confirm(userId: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val response = apiService.confirmation("Bearer secret", "https://registration-a56t3srpta-uc.a.run.app/confirm",  userId)
+            when (response.data) {
+                1 -> {
+                    emit(ResultState.Success(response))
+                }
+                0, -1 -> {
+                    emit(ResultState.Error(response.status?.message))
+                }
+            }
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, VerificationResponse::class.java)
+            emit(errorBody.status?.message?.let { ResultState.Error(it) })
+        }
+    }
+
+    suspend fun check(userId: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val response = apiService.check("Bearer secret", "https://registration-a56t3srpta-uc.a.run.app/check",  userId)
+            when (response.data?.get(0).toString().toInt()) {
+                1 -> {
+                    emit(ResultState.Success(response))
+                }
+                2 -> {
+                    emit(ResultState.Error("Akun masih dalam proses verifikasi"))
+                }
+                0, -1 -> {
+                    emit(response.status?.message?.let { ResultState.Error(it) })
+                }
+            }
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, CheckResponse::class.java)
+            emit(errorBody.status?.message?.let { ResultState.Error(it) })
         }
     }
 

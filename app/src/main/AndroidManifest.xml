@@ -22,6 +22,7 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.verification.VerificationResultActivity"
+            android:parentActivityName=".ui.verification.VerificationActivity"
             android:exported="false" />
 
         <meta-data

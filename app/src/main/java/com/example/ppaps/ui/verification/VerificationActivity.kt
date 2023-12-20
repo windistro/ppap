@@ -42,6 +42,7 @@ class VerificationActivity : AppCompatActivity() {
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
     private var imageCapture: ImageCapture? = null
     private var user_id: String = ""
+    private var count = 0
     private val viewModel by viewModels<VerificationViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -127,8 +128,6 @@ class VerificationActivity : AppCompatActivity() {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    showToast("Berhasil mengambil gambar")
-
                     val photoUri = output.savedUri ?: Uri.fromFile(photoFile)
                     val imageFile = uriToFile(photoUri, this@VerificationActivity).reduceFileImage()
 
@@ -140,19 +139,41 @@ class VerificationActivity : AppCompatActivity() {
                         requestImageFile
                     )
 
-                    lifecycleScope.launch {
-                        viewModel.upload(multipartBody, requestBody).observe(this@VerificationActivity) {
-                            when (it) {
-                                is ResultState.Success -> {
-                                    showLoading(false)
-                                    showToast("Foto berhasil, silahkan foto kembali")
+                    if (count < 4) {
+                        lifecycleScope.launch {
+                            viewModel.upload(multipartBody, requestBody).observe(this@VerificationActivity) {
+                                when (it) {
+                                    is ResultState.Success -> {
+                                        showLoading(false)
+                                        showToast("Foto berhasil, silahkan foto kembali")
+                                        count += 1
+                                    }
+                                    is ResultState.Loading -> { showLoading(true) }
+                                    is ResultState.Error -> {
+                                        showLoading(false)
+                                        showToast(it.message!!)
+                                    }
+                                    else -> {}
                                 }
-                                is ResultState.Loading -> { showLoading(true) }
-                                is ResultState.Error -> {
-                                    showLoading(false)
-                                    showToast(it.message!!)
+                            }
+                        }
+                    } else {
+                        lifecycleScope.launch {
+                            viewModel.confirm(user_id).observe(this@VerificationActivity) {
+                                when (it) {
+                                    is ResultState.Success -> {
+                                        showLoading(false)
+                                        val intent = Intent(this@VerificationActivity, MainActivity::class.java)
+                                        intent.putExtra("result", "true")
+                                        startActivity(intent)
+                                    }
+                                    is ResultState.Loading -> { showLoading(true) }
+                                    is ResultState.Error -> {
+                                        showLoading(false)
+                                        showToast(it.message!!)
+                                    }
+                                    else -> {}
                                 }
-                                else -> {}
                             }
                         }
                     }

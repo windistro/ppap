@@ -1,22 +1,27 @@
 package com.example.ppaps.ui.main.home
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.ppaps.R
 import com.example.ppaps.data.ResultState
 import com.example.ppaps.databinding.FragmentHomeBinding
 import com.example.ppaps.ui.ViewModelFactory
 import com.example.ppaps.ui.signin.SigninViewModel
+import com.example.ppaps.ui.verification.VerificationActivity
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -47,9 +52,24 @@ class HomeFragment : Fragment() {
         getToken()
 
         binding.cvDarurat.setOnClickListener {
-            val mBundle = Bundle()
-            mBundle.putString(EXTRA_ID, userid)
-            it.findNavController().navigate(R.id.action_navigation_home_to_emergencyFragment, mBundle)
+            lifecycleScope.launch {
+                viewModel.checkVerif(userid).observe(requireActivity()) {
+                    when (it) {
+                        is ResultState.Success -> {
+                            val mBundle = Bundle()
+                            mBundle.putString(EXTRA_ID, userid)
+                            findNavController().navigate(R.id.action_navigation_home_to_emergencyFragment, mBundle)
+                        }
+                        is ResultState.Loading -> {  }
+                        is ResultState.Error -> {
+                            showToast(it.message!!)
+                        }
+                        else -> {}
+                    }
+                }
+
+            }
+
         }
     }
 
