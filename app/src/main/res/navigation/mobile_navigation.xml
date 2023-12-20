@@ -42,8 +42,8 @@
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" >
         <action
-            android:id="@+id/action_cameraFragment_to_callFragment"
-            app:destination="@id/callFragment" />
+            android:id="@+id/action_cameraFragment_to_emergencyResultFragment"
+            app:destination="@id/emergencyResultFragment" />
     </fragment>
     <fragment
         android:id="@+id/callFragment"
@@ -68,4 +68,19 @@
         android:name="com.example.ppaps.ui.main.geolocation.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/emergencyResultFragment"
+        android:name="com.example.ppaps.ui.main.emergency.EmergencyResultFragment"
+        android:label="fragment_emergency_result"
+        tools:layout="@layout/fragment_emergency_result" >
+        <action
+            android:id="@+id/action_emergencyResultFragment_to_callFragment"
+            app:destination="@id/callFragment" />
+        <action
+            android:id="@+id/action_emergencyResultFragment_to_cameraFragment3"
+            app:destination="@id/cameraFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/cameraFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

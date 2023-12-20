@@ -1,5 +1,6 @@
 package com.example.ppaps.data.remote
 
+import com.example.ppaps.data.response.EmergencyVerifResponse
 import com.example.ppaps.data.response.LoginResponse
 import com.example.ppaps.data.response.Response
 import com.example.ppaps.data.response.UserResponse
@@ -46,12 +47,12 @@ interface ApiService {
         @Part("user_id") user_id: RequestBody,
     ) : VerificationResponse
 
-//    @Multipart
-//    @POST
-//    suspend fun verification(
-//        @Header("Authorization") token: String,
-//        @Url url: String,
-//        @Part file: MultipartBody.Part,
-//        @Part("user_id") user_id: RequestBody,
-//    )
+    @Multipart
+    @POST
+    suspend fun verification(
+        @Header("Authorization") token: String,
+        @Url url: String,
+        @Part file: MultipartBody.Part,
+        @Part("user_id") user_id: RequestBody,
+    ) : EmergencyVerifResponse
 }

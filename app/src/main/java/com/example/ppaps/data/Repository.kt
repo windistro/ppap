@@ -77,10 +77,7 @@ class Repository private constructor(
                 1 -> {
                     emit(ResultState.Success(response))
                 }
-                0 -> {
-                    emit(ResultState.Error(response.status?.message))
-                }
-                null -> {
+                0, null -> {
                     emit(ResultState.Error(response.status?.message))
                 }
             }
@@ -96,12 +93,21 @@ class Repository private constructor(
     suspend fun verification(photo: MultipartBody.Part, user_id: RequestBody) = liveData {
         emit(ResultState.Loading)
         try {
-            val response = apiService.upload("Bearer secret", "https://verification-a56t3srpta-uc.a.run.app/verification",  photo, user_id)
-            emit(ResultState.Success(response))
+            val response = apiService.verification("Bearer secret", "https://verification-a56t3srpta-uc.a.run.app/verification",  photo, user_id)
+            when (response.data) {
+                1 -> {
+                    emit(ResultState.Success(response))
+                }
+                -1, 0, 2 -> {
+                    emit(ResultState.Error(response.status?.message))
+                }
+            }
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, UserResponse::class.java)
             emit(errorBody.message?.let { ResultState.Error(it) })
+        } catch (e: SocketTimeoutException) {
+            emit(ResultState.Error(e.message))
         }
     }
 

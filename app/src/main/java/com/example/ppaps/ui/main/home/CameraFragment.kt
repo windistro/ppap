@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.ppaps.R
 import com.example.ppaps.data.ResultState
 import com.example.ppaps.databinding.FragmentCameraBinding
@@ -77,14 +78,21 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getToken()
+
+        val toolbar = binding.myToolbar
+        toolbar.title = "Panggilan Darurat"
+        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_arrow_back_24)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
         if (allPermissionsGranted()) {
             startCamera()
         } else {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
             startCamera()
         }
-
-        user_id = arguments?.getString(HomeFragment.EXTRA_ID)!!
 
         binding.captureImage.setOnClickListener {
             takePhoto()
@@ -150,13 +158,16 @@ class CameraFragment : Fragment() {
                             when (it) {
                                 is ResultState.Success -> {
                                     showLoading(false)
-                                    showToast("Foto berhasil, silahkan foto kembali")
+                                    val mBundle = Bundle()
+                                    mBundle.putString("result", "true")
+                                    findNavController().navigate(R.id.action_cameraFragment_to_emergencyResultFragment, mBundle)
                                 }
                                 is ResultState.Loading -> { showLoading(true) }
                                 is ResultState.Error -> {
                                     showLoading(false)
-                                    showToast(it.message!!)
-                                }
+                                    val mBundle = Bundle()
+                                    mBundle.putString("result", "false")
+                                    findNavController().navigate(R.id.action_cameraFragment_to_emergencyResultFragment, mBundle)                                }
                                 else -> {}
                             }
                         }
@@ -164,6 +175,25 @@ class CameraFragment : Fragment() {
                 }
             }
         )
+    }
+
+    private fun getToken() {
+        viewModel.getSession().observe(requireActivity()) {
+            lifecycleScope.launch {
+                viewModel.getUser(it.token).observe(requireActivity()) {
+                    when (it) {
+                        is ResultState.Success -> {
+                            user_id = it.data.user?.idUser!!
+                        }
+                        is ResultState.Loading -> {  }
+                        is ResultState.Error -> {
+                            showToast(it.message!!)
+                        }
+                        else -> {}
+                    }
+                }
+            }
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -30,8 +30,7 @@ class CallFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.imageView.setOnClickListener {
-            it.findNavController().navigate(R.id.action_callFragment_to_emergencyConfirmFragment)
-        }
+
+
     }
 }

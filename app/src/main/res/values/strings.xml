@@ -39,4 +39,6 @@
     <string name="kami_akan_segera_menuju_ke_lokasi_pastikan_alamat_yang_kamu_berikan_jelas">Kami akan segera menuju ke lokasi, pastikan alamat yang kamu berikan jelas</string>
     <string name="register_success">Registrasi Berhasil</string>
     <string name="register_failed">Registrasi Gagal</string>
+    <string name="verification_success">Verifikasi Berhasil</string>
+    <string name="verification_failed">Verifikasi Gagal, Coba Lagi</string>
 </resources>
