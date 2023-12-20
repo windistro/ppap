@@ -11,4 +11,5 @@
     <color name="blue_100">#00A3FF</color>
     <color name="red_300">#D14545</color>
     <color name="text_color">#042238</color>
+    <color name="button">#EEF5FF</color>
 </resources>
