@@ -1,47 +1,40 @@
-package com.example.ppaps.ui.main.history
+package com.example.myambulance.history
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.ppaps.R
-import com.example.ppaps.databinding.FragmentHistoryBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.myambulance.R
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(R.layout.fragment_history) {
 
-    private var _binding: FragmentHistoryBinding? = null
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var historyList: List<HistoryItem> // Gantilah dengan model data yang sesuai
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(HistoryViewModel::class.java)
+        historyList = createDummyData() // Inisialisasi historyList dengan data dummy
+        recyclerView = view.findViewById(R.id.recyclerViewHistory)
+        historyAdapter = HistoryAdapter()
 
-        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = historyAdapter
+        recyclerView.setHasFixedSize(true)
 
-        val gradientDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_bg)
-        view?.background = gradientDrawable
+        historyAdapter.submitList(historyList)
 
-        val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
     }
+    private fun createDummyData(): List<HistoryItem> {
+        return listOf(
+            HistoryItem(R.drawable.ambulance, "Rs. Baladika Husada", "22/12/2023", "Dalam perjalanan"),
+            HistoryItem(R.drawable.ambulance, "Rs. Citra Husada Jember", "25/12/2023", "Dipesan"),
+            HistoryItem(R.drawable.ambulance, "Rs. Umum Kaliwates", "10/12/2023", "Selesai")
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        )
     }
 }
