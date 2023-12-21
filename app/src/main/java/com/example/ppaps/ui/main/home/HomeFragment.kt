@@ -67,9 +67,11 @@ class HomeFragment : Fragment() {
                         else -> {}
                     }
                 }
-
             }
+        }
 
+        binding.cvPesan.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_home_to_bookingFragment)
         }
     }
 
@@ -85,7 +87,13 @@ class HomeFragment : Fragment() {
                         }
                         is ResultState.Loading -> {  }
                         is ResultState.Error -> {
-                            showToast(it.message!!)
+                            AlertDialog.Builder(requireContext()).apply {
+                                setTitle("Error")
+                                setMessage("Akun belum/dalam proses verifikasi")
+                                setPositiveButton("Lanjut") { _, _ -> }
+                                create()
+                                show()
+                            }
                         }
                         else -> {}
                     }

@@ -1,4 +1,4 @@
-package com.example.myambulance.history
+package com.example.ppaps.ui.main.history
 
 data class HistoryItem(
     val ambulanceIcon: Int,

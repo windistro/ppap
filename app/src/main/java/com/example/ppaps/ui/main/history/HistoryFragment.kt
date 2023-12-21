@@ -1,13 +1,11 @@
-package com.example.myambulance.history
+package com.example.ppaps.ui.main.history
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myambulance.R
+import com.example.ppaps.R
 
 class HistoryFragment : Fragment(R.layout.fragment_history) {
 

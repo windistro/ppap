@@ -3,6 +3,7 @@ package com.example.ppaps.data.remote
 import com.example.ppaps.data.response.CheckResponse
 import com.example.ppaps.data.response.ConfirmationResponse
 import com.example.ppaps.data.response.EmergencyVerifResponse
+import com.example.ppaps.data.response.ListHospitalResponse
 import com.example.ppaps.data.response.LoginResponse
 import com.example.ppaps.data.response.Response
 import com.example.ppaps.data.response.UserResponse
@@ -39,6 +40,11 @@ interface ApiService {
     suspend fun getUser(
         @Header("Authorization") token: String,
     ): UserResponse
+
+    @GET("hospitals")
+    suspend fun listHospitals(
+        @Header("Authorization") token: String,
+    ): ListHospitalResponse
 
     @Multipart
     @POST

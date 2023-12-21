@@ -6,6 +6,7 @@ import com.example.ppaps.data.pref.UserModel
 import com.example.ppaps.data.pref.UserPreference
 import com.example.ppaps.data.remote.ApiService
 import com.example.ppaps.data.response.CheckResponse
+import com.example.ppaps.data.response.ListHospitalResponse
 import com.example.ppaps.data.response.LoginResponse
 import com.example.ppaps.data.response.Response
 import com.example.ppaps.data.response.UserResponse
@@ -59,6 +60,18 @@ class Repository private constructor(
         }
     }
 
+    suspend fun getHospital(token: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val response = apiService.listHospitals("Bearer $token")
+            emit(ResultState.Success(response))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ListHospitalResponse::class.java)
+            emit(errorBody.message?.let { ResultState.Error(it) })
+        }
+    }
+
     suspend fun getUserData(token: String) = liveData {
         emit(ResultState.Loading)
         try {
@@ -94,12 +107,12 @@ class Repository private constructor(
         emit(ResultState.Loading)
         try {
             val response = apiService.check("Bearer secret", "https://registration-a56t3srpta-uc.a.run.app/check",  userId)
-            when (response.data?.get(0).toString().toInt()) {
+            when (response.accountStatus) {
                 1 -> {
                     emit(ResultState.Success(response))
                 }
                 2 -> {
-                    emit(ResultState.Error("Akun masih dalam proses verifikasi"))
+                    emit(response.status?.message?.let { ResultState.Error(it) })
                 }
                 0, -1 -> {
                     emit(response.status?.message?.let { ResultState.Error(it) })

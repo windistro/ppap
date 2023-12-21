@@ -7,6 +7,9 @@ data class CheckResponse(
 	@field:SerializedName("data")
 	val data: String? = null,
 
+	@field:SerializedName("account_status")
+	val accountStatus: Int? = null,
+
 	@field:SerializedName("status")
 	val status: Check? = null
 )
