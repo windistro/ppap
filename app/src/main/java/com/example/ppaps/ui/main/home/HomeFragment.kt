@@ -81,12 +81,14 @@ class HomeFragment : Fragment() {
                 viewModel.getUser(it.token).observe(requireActivity()) {
                     when (it) {
                         is ResultState.Success -> {
+                            showLoading(false)
                             val username = it.data.user?.username!!
                             userid = it.data.user.idUser!!
                             showUsername(username)
                         }
-                        is ResultState.Loading -> {  }
+                        is ResultState.Loading -> { showLoading(true) }
                         is ResultState.Error -> {
+                            showLoading(false)
                             AlertDialog.Builder(requireContext()).apply {
                                 setTitle("Error")
                                 setMessage("Akun belum/dalam proses verifikasi")
@@ -107,6 +109,10 @@ class HomeFragment : Fragment() {
     }
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

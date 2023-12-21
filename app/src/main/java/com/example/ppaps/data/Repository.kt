@@ -6,6 +6,7 @@ import com.example.ppaps.data.pref.UserModel
 import com.example.ppaps.data.pref.UserPreference
 import com.example.ppaps.data.remote.ApiService
 import com.example.ppaps.data.response.CheckResponse
+import com.example.ppaps.data.response.EmergencyVerifResponse
 import com.example.ppaps.data.response.ListHospitalResponse
 import com.example.ppaps.data.response.LoginResponse
 import com.example.ppaps.data.response.Response
@@ -155,13 +156,15 @@ class Repository private constructor(
                     emit(ResultState.Success(response))
                 }
                 -1, 0, 2 -> {
+                    Log.d("TAG", "verification: ${response.status?.message}")
                     emit(ResultState.Error(response.status?.message))
                 }
             }
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, UserResponse::class.java)
-            emit(errorBody.message?.let { ResultState.Error(it) })
+            val errorBody = Gson().fromJson(jsonInString, EmergencyVerifResponse::class.java)
+            emit(errorBody.status?.message?.let { ResultState.Error(it) })
+            Log.d("TAG", "verification: ${errorBody.status?.message}")
         } catch (e: SocketTimeoutException) {
             emit(ResultState.Error(e.message))
         }

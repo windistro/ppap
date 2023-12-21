@@ -49,7 +49,7 @@ class EmergencyConfirmFragment : Fragment() {
     }
 
     private fun changeFragment() {
-        findNavController().navigate(R.id.action_emergencyConfirmFragment_to_mapsFragment)
+        findNavController().navigate(R.id.action_emergencyConfirmFragment_to_trackingFragment)
     }
 
     override fun onDestroyView() {

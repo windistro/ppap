@@ -63,14 +63,9 @@
         android:label="fragment_emergency_confirm"
         tools:layout="@layout/fragment_emergency_confirm" >
         <action
-            android:id="@+id/action_emergencyConfirmFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            android:id="@+id/action_emergencyConfirmFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/mapsFragment"
-        android:name="com.example.ppaps.ui.main.geolocation.MapsFragment"
-        android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" />
     <fragment
         android:id="@+id/emergencyResultFragment"
         android:name="com.example.ppaps.ui.main.emergency.EmergencyResultFragment"
@@ -91,4 +86,9 @@
         android:name="com.example.ppaps.ui.main.booking.BookingFragment"
         android:label="fragment_booking"
         tools:layout="@layout/fragment_booking" />
+    <fragment
+        android:id="@+id/trackingFragment"
+        android:name="com.example.ppaps.ui.main.tracking.TrackingFragment"
+        android:label="fragment_tracking"
+        tools:layout="@layout/fragment_tracking" />
 </navigation>

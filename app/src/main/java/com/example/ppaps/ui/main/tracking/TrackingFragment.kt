@@ -1,11 +1,11 @@
-package com.example.myambulance.tracking
+package com.example.ppaps.ui.main.tracking
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.myambulance.R
+import com.example.ppaps.R
 
 class TrackingFragment : Fragment() {
     override fun onCreateView(

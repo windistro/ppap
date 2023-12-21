@@ -64,16 +64,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         locationArrayList!!.add(RsUmumUmj)
         locationArrayList!!.add(RsUmumTniAngkatanDarat)
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+//        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+//        mapFragment.getMapAsync(this)
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(this@MapsFragment)
+//        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+//        mapFragment?.getMapAsync(this@MapsFragment)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
