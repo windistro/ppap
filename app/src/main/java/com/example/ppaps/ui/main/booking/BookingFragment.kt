@@ -21,64 +21,87 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class BookingFragment : Fragment() {
+class BookingFragment : Fragment(R.layout.fragment_booking) {
 
-    private var _binding: FragmentBookingBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel by viewModels<AccountViewModel> {
-        ViewModelFactory.getInstance(requireContext())
-    }
+    private lateinit var nameEditText: TextInputEditText
+    private lateinit var addressEditText: TextInputEditText
+    private lateinit var phoneEditText: TextInputEditText
+    private lateinit var datePickerEditText: TextInputEditText
+    private lateinit var longEditText: TextInputEditText
+    private lateinit var btnPesan: Button
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentBookingBinding.inflate(inflater, container, false)
-        val gradientDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_bg)
-        view?.background = gradientDrawable
-        return binding.root
+    private val ambulanceService: AmbulanceService by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://api-cc-a56t3srpta-uc.a.run.app")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(AmbulanceService::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = binding.toolbar
-        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_arrow_back_24)
-        toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
+        nameEditText = view.findViewById(R.id.nameEditText)
+        addressEditText = view.findViewById(R.id.addressEditText)
+        phoneEditText = view.findViewById(R.id.phoneEditText)
+        datePickerEditText = view.findViewById(R.id.datePickerEditText)
+        longEditText = view.findViewById(R.id.longEditText)
+        btnPesan = view.findViewById(R.id.btn_pesan)
 
-
-        binding.datePickerEditText.setOnClickListener {
+        datePickerEditText.setOnClickListener {
             showDatePickerDialog()
         }
 
-        binding.btnPesan.setOnClickListener{
-            val name = binding.nameEditText.text.toString()
-            val address = binding.addressEditText.text.toString()
-            val phone = binding.phoneEditText.text.toString()
-            val date = binding.datePickerEditText.text.toString()
-            val longText = binding.longEditText.text.toString()
+        btnPesan.setOnClickListener{
+            val name = nameEditText.text.toString()
+            val address = addressEditText.text.toString()
+            val phone = phoneEditText.text.toString()
+            val date = datePickerEditText.text.toString()
+            val longText = longEditText.text.toString()
 
             if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || date.isEmpty() || longText.isEmpty()) {
                 Toast.makeText(requireContext(), "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Simulasi pesanan berhasil
-            showSuccessMessage()
-        }
+            val bookingRequest = AmbulanceBookingRequest(name, address, phone, date, longText)
+
+            ambulanceService.bookAmbulance(bookingRequest).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        // Simulasi pesanan berhasil
+                        showSuccessMessage()
+                    } else {
+                        val statusCode = response.code()
+                        Log.e("API_REQUEST", "Failed with status code: $statusCode")
+                        Toast.makeText(
+                            requireContext(),
+                            "Gagal melakukan pesanan ambulance. Kode status: $statusCode",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Gagal melakukan pesanan ambulance",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+
+            }
     }
     private fun showSuccessMessage() {
         Toast.makeText(requireContext(), "Pesanan ambulance berhasil", Toast.LENGTH_SHORT).show()
 
         // Clear form atau lakukan tindakan lain yang diperlukan
-        binding.nameEditText.text = null
-        binding.addressEditText.text = null
-        binding.phoneEditText.text = null
-        binding.datePickerEditText.text = null
-        binding.longEditText.text = null
+        nameEditText.text = null
+        addressEditText.text = null
+        phoneEditText.text = null
+        datePickerEditText.text = null
+        longEditText.text = null
     }
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -87,7 +110,7 @@ class BookingFragment : Fragment() {
             { _: DatePicker, year: Int, month: Int, day: Int ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(year, month, day)
-                binding.datePickerEditText.setText(
+                datePickerEditText.setText(
                     SimpleDateFormat("dd/MM/yyyy", Locale.US).format(selectedDate.time)
                 )
             },
@@ -96,5 +119,11 @@ class BookingFragment : Fragment() {
             calendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
+    }
+    private fun createRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api-cc-a56t3srpta-uc.a.run.app")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 }
