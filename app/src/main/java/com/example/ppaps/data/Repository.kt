@@ -1,6 +1,7 @@
 package com.example.ppaps.data
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.ppaps.data.pref.UserModel
 import com.example.ppaps.data.pref.UserPreference
@@ -49,10 +50,43 @@ class Repository private constructor(
         }
     }
 
+    suspend fun registerBaru(url:String, username: String, password: String, nohp: String,name: String, ) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val response = apiService.registerBaru(url, username, password, nohp, name)
+            Log.d("RequestRegister", url)
+            when (response.status) {
+                1 -> {
+                    emit(ResultState.Success(response))
+                }
+                0 -> {
+                    emit(ResultState.Error(response.message))
+                }
+            }
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, Response::class.java)
+            Log.e("Repository", errorBody.message.toString())
+            emit(errorBody.message?.let { ResultState.Error(it) })
+        }
+    }
+
     suspend fun login(username: String, password: String) = liveData {
         emit(ResultState.Loading)
         try {
             val response = apiService.login(username, password)
+            emit(ResultState.Success(response))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, LoginResponse::class.java)
+            emit(errorBody.message?.let { ResultState.Error(it) })
+        }
+    }
+
+    suspend fun loginBaru(username: String, password: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val response = apiService.loginBaru( "https://test-tulevz6a7a-uc.a.run.app/auth/login", username, password)
             emit(ResultState.Success(response))
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()
@@ -77,6 +111,18 @@ class Repository private constructor(
         emit(ResultState.Loading)
         try {
             val response = apiService.getUser("Bearer $token")
+            emit(ResultState.Success(response))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, UserResponse::class.java)
+            emit(errorBody.message?.let { ResultState.Error(it) })
+        }
+    }
+
+    suspend fun changePassword(token: String, oldPass: String, newPass: String, newPassConfirm: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val response = apiService.changePassword("Bearer $token", oldPass, newPass, newPassConfirm)
             emit(ResultState.Success(response))
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()

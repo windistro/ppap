@@ -3,11 +3,8 @@ package com.example.ppaps.ui.main.history
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.ppaps.data.Repository
 
-class HistoryViewModel : ViewModel() {
+class HistoryViewModel(private val repository: Repository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
 }

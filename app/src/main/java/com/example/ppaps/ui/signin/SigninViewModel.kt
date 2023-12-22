@@ -8,7 +8,7 @@ import com.example.ppaps.data.pref.UserModel
 import kotlinx.coroutines.launch
 
 class SigninViewModel(private val repository: Repository) : ViewModel() {
-    suspend fun login(username: String, password: String) = repository.login(username, password)
+    suspend fun login(username: String, password: String) = repository.loginBaru(username, password)
 
     fun saveSession(user: UserModel) {
         viewModelScope.launch {

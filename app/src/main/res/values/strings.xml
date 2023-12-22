@@ -67,4 +67,14 @@
     <string name="status_pesanan_terkonfirmasi">Status: Pesanan Terkonfirmasi</string>
     <string name="plat_mobil_abc_123">Plat Mobil: ABC 123</string>
     <string name="driver_budi_haryadi">Driver : Budi Haryadi</string>
+    <string name="hospital_name">Nama Rumah Sakit</string>
+    <string name="order_date">Tanggal Pemesanan</string>
+    <string name="order_status">Status Pemesanan</string>
+    <string name="old_pass">Password Lama</string>
+    <string name="new_pass">Password Baru</string>
+    <string name="new_pass_con">Konfirmasi Password Baru</string>
+    <string name="renew_pass">Perbarui Password</string>
+    <string name="change_password">CHANGE PASSWORD</string>
+    <string name="old_pass_hint">Masukkan Password Lama</string>
+    <string name="new_pass_hint">Masukkan Password Baru</string>
 </resources>

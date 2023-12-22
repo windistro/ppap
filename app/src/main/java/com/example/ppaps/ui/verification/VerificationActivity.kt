@@ -71,6 +71,8 @@ class VerificationActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.face_verif)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+//        getUserData()
+
         binding.captureImage.setOnClickListener {
             takePhoto()
         }
@@ -82,7 +84,6 @@ class VerificationActivity : AppCompatActivity() {
             startCamera()
         }
 
-        getUserData()
     }
 
     private fun startCamera() {
@@ -131,7 +132,8 @@ class VerificationActivity : AppCompatActivity() {
                     val photoUri = output.savedUri ?: Uri.fromFile(photoFile)
                     val imageFile = uriToFile(photoUri, this@VerificationActivity).reduceFileImage()
 
-                    val requestBody = user_id.toRequestBody("text/plain".toMediaType())
+                    val username = intent.getStringExtra("username")
+                    val requestBody = username?.toRequestBody("text/plain".toMediaType())
                     val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
                     val multipartBody = MultipartBody.Part.createFormData(
                         "face_photo",
@@ -141,9 +143,10 @@ class VerificationActivity : AppCompatActivity() {
 
                     if (count < 4) {
                         lifecycleScope.launch {
-                            viewModel.upload(multipartBody, requestBody).observe(this@VerificationActivity) {
+                            viewModel.upload(multipartBody, requestBody!!).observe(this@VerificationActivity) {
                                 when (it) {
                                     is ResultState.Success -> {
+                                        Log.d(TAG, username)
                                         showLoading(false)
                                         showToast("Foto berhasil, silahkan foto kembali")
                                         count += 1

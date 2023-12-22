@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ppaps.data.Repository
 import com.example.ppaps.di.Injection
 import com.example.ppaps.ui.main.account.AccountViewModel
+import com.example.ppaps.ui.main.account.ChangePasswordViewModel
 import com.example.ppaps.ui.main.call.CallViewModel
 import com.example.ppaps.ui.main.home.CameraViewModel
 import com.example.ppaps.ui.main.home.HomeViewModel
@@ -38,6 +39,9 @@ class ViewModelFactory(private val repository: Repository) : ViewModelProvider.N
             }
             modelClass.isAssignableFrom(CallViewModel::class.java) -> {
                 CallViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(ChangePasswordViewModel::class.java) -> {
+                ChangePasswordViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

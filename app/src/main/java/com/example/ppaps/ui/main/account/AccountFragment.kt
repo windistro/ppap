@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.ppaps.R
 import com.example.ppaps.data.ResultState
 import com.example.ppaps.databinding.FragmentAccountBinding
 import com.example.ppaps.ui.ViewModelFactory
 import com.example.ppaps.ui.main.home.CameraViewModel
+import com.example.ppaps.ui.main.home.HomeFragment
 import kotlinx.coroutines.launch
 
 class AccountFragment : Fragment() {
@@ -43,6 +45,21 @@ class AccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getUserData()
+
+        binding.apply {
+            btnEditProfile.setOnClickListener{
+                it.findNavController().navigate(R.id.action_navigation_account_to_changePasswordFragment)
+            }
+            buttonAbout.setOnClickListener{
+                showToast("Fitur belum tersedia")
+            }
+            buttonFeedback.setOnClickListener{
+                showToast("Fitur belum tersedia")
+            }
+            buttonSetting.setOnClickListener{
+                showToast("Fitur belum tersedia")
+            }
+        }
     }
 
     private fun getUserData() {

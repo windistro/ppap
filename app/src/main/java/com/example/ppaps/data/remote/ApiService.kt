@@ -5,6 +5,7 @@ import com.example.ppaps.data.response.ConfirmationResponse
 import com.example.ppaps.data.response.EmergencyVerifResponse
 import com.example.ppaps.data.response.ListHospitalResponse
 import com.example.ppaps.data.response.LoginResponse
+import com.example.ppaps.data.response.RegisterResponse
 import com.example.ppaps.data.response.Response
 import com.example.ppaps.data.response.UserResponse
 import com.example.ppaps.data.response.VerificationResponse
@@ -16,6 +17,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Url
 
@@ -30,8 +32,26 @@ interface ApiService {
     ): Response
 
     @FormUrlEncoded
+    @POST
+    suspend fun registerBaru(
+        @Url url: String,
+        @Field("username") username: String,
+        @Field("password") password: String,
+        @Field("no_hp") no_hp: String,
+        @Field("name") name: String
+    ): RegisterResponse
+
+    @FormUrlEncoded
     @POST("auth/login")
     suspend fun login(
+        @Field("username") username: String,
+        @Field("password") password: String,
+    ) : LoginResponse
+
+    @FormUrlEncoded
+    @POST
+    suspend fun loginBaru(
+        @Url url: String,
         @Field("username") username: String,
         @Field("password") password: String,
     ) : LoginResponse
@@ -46,13 +66,29 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): ListHospitalResponse
 
+    @FormUrlEncoded
+    @PUT("change-password")
+    suspend fun changePassword(
+        @Header("Authorization") token: String,
+        @Field("oldPassword") oldPass: String,
+        @Field("newPassword") newPass: String,
+        @Field("confirmNewPassword") newPassConfirm: String,
+        ): Response
+
+    @POST("pesan")
+    suspend fun order(
+        @Header("Authorization") token: String,
+        @Field("id_rumah_sakit") hospitalId: String,
+        @Field("tanggal") date: String,
+    ): ListHospitalResponse
+
     @Multipart
     @POST
     suspend fun upload(
         @Header("Authorization") token: String,
         @Url url: String,
         @Part file: MultipartBody.Part,
-        @Part("user_id") user_id: RequestBody,
+        @Part("user_id") username: RequestBody,
     ) : VerificationResponse
 
     @Multipart

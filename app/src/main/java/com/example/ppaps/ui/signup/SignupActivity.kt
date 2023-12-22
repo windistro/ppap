@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
@@ -59,10 +60,10 @@ class SignupActivity : AppCompatActivity() {
     private fun registerAction() {
         binding.btnSignup.setOnClickListener {
             lifecycleScope.launch {
-                val username = binding.emailEditText.text.toString()
-                val password = binding.pwEditText.text.toString()
-                val nohp = binding.hpEditText.text.toString()
-                val name = binding.nameEditText.text.toString()
+                val username = binding.usernameEditText.text.toString().trim()
+                val password = binding.pwEditText.text.toString().trim()
+                val nohp = binding.hpEditText.text.toString().trim()
+                val name = binding.nameEditText.text.toString().trim()
                 if (username.isEmpty() || password.isEmpty() || nohp.isEmpty() || name.isEmpty()) {
                     AlertDialog.Builder(this@SignupActivity).apply {
                         setTitle("Error")
@@ -82,6 +83,7 @@ class SignupActivity : AppCompatActivity() {
                                     setPositiveButton("Lanjut") { _, _ ->
                                         val intent =
                                             Intent(this@SignupActivity, VerificationActivity::class.java)
+                                        intent.putExtra("username", username)
                                         intent.flags =
                                             Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                         startActivity(intent)
@@ -89,6 +91,7 @@ class SignupActivity : AppCompatActivity() {
                                     create()
                                     show()
                                 }
+//                                showToast(it.data.message!!)
                             }
                             is ResultState.Loading -> showLoading(true)
                             is ResultState.Error -> {
@@ -107,6 +110,10 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showLoading(isLoading: Boolean) {

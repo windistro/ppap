@@ -30,14 +30,6 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
     private lateinit var longEditText: TextInputEditText
     private lateinit var btnPesan: Button
 
-    private val ambulanceService: AmbulanceService by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://api-cc-a56t3srpta-uc.a.run.app")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(AmbulanceService::class.java)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -62,36 +54,10 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
             if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || date.isEmpty() || longText.isEmpty()) {
                 Toast.makeText(requireContext(), "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
+            } else  {
+                showSuccessMessage()
             }
-
-            val bookingRequest = AmbulanceBookingRequest(name, address, phone, date, longText)
-
-            ambulanceService.bookAmbulance(bookingRequest).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        // Simulasi pesanan berhasil
-                        showSuccessMessage()
-                    } else {
-                        val statusCode = response.code()
-                        Log.e("API_REQUEST", "Failed with status code: $statusCode")
-                        Toast.makeText(
-                            requireContext(),
-                            "Gagal melakukan pesanan ambulance. Kode status: $statusCode",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Gagal melakukan pesanan ambulance",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-
-            }
+        }
     }
     private fun showSuccessMessage() {
         Toast.makeText(requireContext(), "Pesanan ambulance berhasil", Toast.LENGTH_SHORT).show()
@@ -119,11 +85,5 @@ class BookingFragment : Fragment(R.layout.fragment_booking) {
             calendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
-    }
-    private fun createRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api-cc-a56t3srpta-uc.a.run.app")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
     }
 }
